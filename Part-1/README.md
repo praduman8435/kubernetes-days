@@ -85,8 +85,7 @@ Kubernetes addresses these problems with features like:
     ```bash
     docker ps
     ```
-
-  <p align="center">
+    <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715754315784/a5e8f1b9-f7a9-4c89-ac3f-0d3dd76cb564.png">
 </p>
 
@@ -100,9 +99,7 @@ Kubernetes addresses these problems with features like:
     
     ps aux | grep '[n]ginx' | sort -n -k 2 | head -n 1 | awk '{print $2}'
     ```
-
-
-  <p align="center">
+    <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1718737283139/a64e64cc-6086-40fe-87ca-dafb1db70f6b.png">
 </p>
     
@@ -111,8 +108,7 @@ Kubernetes addresses these problems with features like:
     ```bash
     lsns -p <PID>
     ```
-
-  <p align="center">
+    <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1718737355110/1494f481-f5b6-4e7d-801d-a3ace6b7e108.png">
 </p>
     
