@@ -40,11 +40,12 @@
 * docker desktop
     
 
-### **Kubernetes Architecture**
+### Understanding Kubernetes Architecture: Master and Worker Nodes
 
 Kubernetes architecture is divided into master nodes and worker nodes, each with specific components that handle different tasks.
 
-<p align="center">
+</p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715781229351/06180e99-d0e6-4906-bc45-77f33cdd87f9.png">
 </p>
 
@@ -76,9 +77,7 @@ Worker nodes run the applications. They handle the workload by running pods, whi
 * **Pod**: The smallest deployable unit in Kubernetes, consisting of one or more containers that share storage, network, and configuration. Pods are scheduled on worker nodes and managed by the kubelet.
     
 
----
-
-### K8s Installation Using KOPS on EC2
+### Step-by-Step Guide: K8s Installation Using KOPS on EC2
 
 Create an [**EC2 instance**](https://itspraduman.hashnode.dev/how-to-connect-to-ec2-instance-easily-without-password) and connect it to your local machine or use your personal laptop.
 
@@ -103,7 +102,7 @@ sudo mv kops-linux-amd64 /usr/local/bin/kops
 
 **Set up AWS CLI configuration on your EC2 Instance or Laptop.**
 
-Run `aws configure`
+*Run* `aws configure`
 
 ### Kubernetes Cluster Installation
 
@@ -161,7 +160,7 @@ Follow these steps carefully and read each command before executing.
 
 ---
 
-### **How commands works**
+### How kubectl Commands Work: Behind the Scenes
 
 *when we give a command, we are generally communicate with the cluster*
 
@@ -192,18 +191,19 @@ cat .kube/config
 
 The scheduler looks for the best node based on taints/tolerations, affinity, and node selector to run the workload. Then, kubelet runs the workload and talks to CRI to pull the image and start it. The status is updated. Kube-proxy acts like iptables, and your workload runs. Health checks pass and inform the API server that the pod is running, and data is stored in ETCD.
 
-Inside **kubeconfig file** we have :
+**Inside kubeconfig file we have :**
 
 * user information
     
 * cluster information
     
 * context information
-
-<p align="center">
+    
+</p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715834899537/cda9db26-9dcd-4827-9751-413d89bbf63f.png">
 </p>
-    
+
 * Inside context, we define which user is connected to which cluster.
     
 * Inside users, we define the users present.
@@ -217,7 +217,8 @@ Inside **kubeconfig file** we have :
 kubectl config view
 ```
 
-<p align="center">
+</p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715835730812/b0fba319-dab0-4643-97d5-7f502d3f6f42.png">
 </p>
 
@@ -227,7 +228,8 @@ kubectl config view
 kubectl config get-contexts
 ```
 
-<p align="center">
+</p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715835865681/51224f0a-98f7-4865-bf42-a45ea5663d0b.png">
 </p>
 
@@ -237,15 +239,16 @@ kubectl config get-contexts
 kubectl config get-users
 ```
 
-<p align="center">
+</p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1718804912951/89e862ef-cfad-493c-a704-29f0ea8c0303.png">
 </p>
 
 ---
 
-### **How to create a new user inside kubernetes**
+### Creating a New User in Kubernetes: A Detailed Guide
 
-* **Create a private key using opnssl**
+* **Create a private key using openssl**
     
     ```bash
     openssl genrsa -out praduman.key 2048
@@ -254,8 +257,8 @@ kubectl config get-users
     ```bash
     openssl req -new -key praduman.key -out praduman.csr -subj "/CN=praduman/O=group1"
     ```
-
-    <p align="center">
+    </p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1718807880743/21660be5-f5d9-4ca7-8e83-9da7e5a86f90.png">
 </p>
     
@@ -264,8 +267,8 @@ kubectl config get-users
     ```bash
     cat praduman.csr | base64 | tr -d '\n'
     ```
-
-    <p align="center">
+    </p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715836303598/620fd344-b09f-450d-8e28-e8ba1d0ce201.png">
 </p>
     
@@ -276,9 +279,9 @@ kubectl config get-users
     ```
     
     ```yaml
-    - apiVersion: certificates.k8s.io/v1
+    apiVersion: certificates.k8s.io/v1
     kind: CertificateSigningRequest
-    matadata:
+    metadata:
         name: praduman
     spec:
         request: <BASE64-encoded CSR>
@@ -296,54 +299,64 @@ kubectl config get-users
     kubectl certificate approve praduman
     ```
 
-   <p align="center">
+    </p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715838970607/bc6f7939-00bc-4917-9339-c5f5b039080e.png">
 </p>
     
-* **Create a configuration specific to the user**
+* **Get the crt specific to the user using jsonpath**
     
     ```bash
     kubectl get csr praduman -o jsonpath='{.status.certificate}' | base64 --decode > praduman.crt
     ```
     
+    > a `praduman.crt` file is created
+    
 * **Create a role and role binding**
     
+    ```basic
+    vim role.yaml
+    ```
+    
     ```yaml
-    cat << EOF | kubectl apply -f -
-    > kind: Role
-    > apiVersion: rbac.authorization.k8s.io/v1
-    > metadata:
-    >   namespace: default
-    >   name: pod-reader
-    > rules:
-    > - apiGroups: [""]
-    >   resources: ["pods"]
-    >   verbs: ["get", "watch", "list"]
-    > ---
-    > kind: RoleBinding
-    > apiVersion: rbac.authorization.k8s.io/v1
-    > metadata:
-    >   name: read-pods
-    >   namespace: default
-    > subjects:
-    > - kind: User
-    >   name: praduman
-    >   apiGroup: rbac.authorization.k8s.io
-    > roleRef:
-    >   kind: Role
-    >   name: pod-reader
-    >   apiGroup: rbac.authorization.k8s.io
-    > EOF
+     kind: Role
+     apiVersion: rbac.authorization.k8s.io/v1
+     metadata:
+       namespace: default
+       name: pod-reader
+     rules:
+     - apiGroups: [""]
+       resources: ["pods"]
+       verbs: ["get", "watch", "list"]
+    ---
+     kind: RoleBinding
+     apiVersion: rbac.authorization.k8s.io/v1
+     metadata:
+       name: read-pods
+       namespace: default
+     subjects:
+     - kind: User
+       name: praduman
+       apiGroup: rbac.authorization.k8s.io
+     roleRef:
+       kind: Role
+       name: pod-reader
+       apiGroup: rbac.authorization.k8s.io
+    ```
+    
+    ```basic
+    kubectl apply -f role.yaml
     ```
 
-    <p align="center">
+    </p>
+  <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1715839653601/48313cf1-ae3f-424e-8359-27aaef7b4693.png">
 </p>
     
 * **Set credentials**
     
     ```bash
-    kubectl set-credentials praduman --client-certificate=praduman.crt --client-key=praduman.key
+    kubectl config set-credentials praduman --client-certificate=praduman.crt --client-key=praduman.key
     ```
     
 * **Create context**
@@ -367,6 +380,8 @@ kubectl config get-users
     kubectl config use-context praduman-context
     ```
     
+
+> a new user is now created and now you can use it
 
 ---
 
@@ -416,11 +431,58 @@ kubectl config get-users
 
 ---
 
+### **GVR (Group-Version-Resource)**
+
+Think of GVR as the address for finding a type of resource in Kubernetes
+
+* **Group**: A broad category (like a section in a library)
+    
+* **Version**: A specific edition within that category (like a book edition)
+    
+* **Resource**: The actual item you want (like a specific book)
+    
+
+**Example**: `apps/v1/deployments`
+
+* **Group**: `apps` (the section for applications)
+    
+* **Version**: `v1` (the first edition of this section)
+    
+* **Resource**: `deployments` (the specific item you’re looking for, like a book on deployments)
+    
+
+### **GVK (Group-Version-Kind)**
+
+GVK is similar, but it focuses on the type of item you’re working with
+
+* **Group**: Same broad category
+    
+* **Version**: Same specific edition
+    
+* **Kind**: The specific type or class of the item
+    
+
+**Example**: `apps/v1/Deployment`
+
+* **Group**: `apps`
+    
+* **Version**: `v1`
+    
+* **Kind**: `Deployment` (the exact type of item you’re dealing with, like a specific chapter in the book)
+    
+
+> * **GVR** tells you where to find the resource (`apps/v1/deployments`)
+>     
+> * **GVK** tells you exactly what the resource is (`apps/v1/Deployment`)
+>     
+
+---
+
 ### Communicate with the API server without using kubectl and kubeconfig
 
-> wanted to talk to kubernetes api server without kubectl or kubeconfig ?
+> *wanted to talk to kubernetes api server without kubectl or kubeconfig ?*
 > 
-> we will talk to kubernetes directly through api server
+> *we will talk to kubernetes directly through api server*
 
 * **create a service account**
     
@@ -467,8 +529,6 @@ kubectl config get-users
     ```
     
 
----
+### Conclusion
 
-### Summary
-
-> This article provides a comprehensive guide on Kubernetes and its architecture, tools for creating, managing, and running Kubernetes clusters, and step-by-step instructions for setting up a Kubernetes cluster using KOPS on EC2. It covers the distinction between self-managed and managed Kubernetes clusters, details tools for local development, and explains the Kubernetes architecture, including master and worker nodes' components. Additionally, it provides commands and detailed procedures for cluster creation, configuration, and user management, including interacting with the Kubernetes API server using REST calls.
+> In conclusion, this article provides a detailed exploration of Kubernetes, covering its architecture, tools for creating and managing clusters, and practical steps for setting up a Kubernetes cluster using KOPS on EC2. It distinguishes between self-managed and managed Kubernetes clusters, highlights tools for local development, and delves into the components of master and worker nodes. Additionally, it offers commands and procedures for cluster creation, configuration, and user management, including direct interaction with the Kubernetes API server using REST calls. This comprehensive guide serves as a valuable resource for anyone looking to understand and implement Kubernetes effectively.
