@@ -20,7 +20,10 @@ A Kubernetes Service is an object that helps you expose an application running i
     kubectl get svc -owide
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727034767770/9198e3a6-10d1-472f-8b1f-009143034fe0.png align="center")
+    </p>
+  <p align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727034767770/9198e3a6-10d1-472f-8b1f-009143034fe0.png">
+</p>
     
 
 #### What Are Endpoints in Kubernetes?
