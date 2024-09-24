@@ -907,11 +907,9 @@ Now, we create a service using `ClusterIP` and a resource using `Ingress`. User 
 </p>
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125853427/5a725d7c-30cd-40cf-94a6-aac359eb74fa.png align="center")
     
-    </p>
   <p align="center">
-  <img src="">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727125857934/df63eef1-53c5-40fd-8ecf-98bc74932dd9.png">
 </p>
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125857934/df63eef1-53c5-40fd-8ecf-98bc74932dd9.png align="center")
     
 * Now apply the create `ingress.yaml` file
     
@@ -932,7 +930,7 @@ Now, we create a service using `ClusterIP` and a resource using `Ingress`. User 
   <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126383167/a47e632d-cba7-4ba2-a5f4-7e8637e1d57b.png">
 </p>
-    
+
     ```bash
     curl kubernetes.hindi.bootcamp:30418
     ```
