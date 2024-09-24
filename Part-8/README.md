@@ -77,7 +77,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     kubectl apply -f mcp.yml
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035422081/02c5bbe4-15c2-4229-9829-76401385f3e6.png align="center")
+    </p>
+  <p align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727035422081/02c5bbe4-15c2-4229-9829-76401385f3e6.png">
+</p>
+
     
 * To see the pod’s IP
     
@@ -85,7 +89,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     kubectl get pod shared-namespace -owide
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035501759/932c5c16-6dd0-4461-9f7b-ebab8a292092.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035501759/932c5c16-6dd0-4461-9f7b-ebab8a292092.png align="center")
     
 * Check the node where the pod is running and SSH into it
     
@@ -93,7 +101,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     ssh node01
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035555351/cb03278f-88d1-40a7-a2c7-587560689130.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035555351/cb03278f-88d1-40a7-a2c7-587560689130.png align="center")
     
 * To view the network namespaces created
     
@@ -101,7 +113,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     ip netns list
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035604459/eb73248a-0f9f-4c19-906f-df4b22663d57.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035604459/eb73248a-0f9f-4c19-906f-df4b22663d57.png align="center")
     
 * To find the pause container
     
@@ -109,7 +125,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     lsns | grep nginx
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035736678/89d8c4ba-3b5f-45c2-8bac-ad312301a9f4.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035736678/89d8c4ba-3b5f-45c2-8bac-ad312301a9f4.png align="center")
     
 * Get details of the pause container's namespaces (net, ipc, uts)
     
@@ -117,7 +137,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     lsns -p <PID-from-the-previous-command>
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727036619786/dd3809c1-6b17-4746-8468-ce630f4354e0.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727036619786/dd3809c1-6b17-4746-8468-ce630f4354e0.png align="center")
     
 * To check the list of all network namespaces
     
@@ -125,7 +149,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     ls -lt /var/run/netns
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035836018/33ba65eb-bb9f-4eb4-8ff7-daba9e073298.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727035836018/33ba65eb-bb9f-4eb4-8ff7-daba9e073298.png align="center")
     
 * Exec into the namespace or into the pod to see the ip link
     
@@ -134,7 +162,11 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
     kubectl exec -it <pod-name> -- ip addr
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727036968501/178cacd3-2285-4703-8e87-13c85fa98293.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727036968501/178cacd3-2285-4703-8e87-13c85fa98293.png align="center")
     
 * Find the veth Pair
     
@@ -151,11 +183,19 @@ Inside each node, there's always a **veth**(`Virtual Ethernet`) **pair** for net
         
 * **Inter Node communication**
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727037359729/dcb73739-2675-44f4-bb1a-b9edafb5b36b.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727037359729/dcb73739-2675-44f4-bb1a-b9edafb5b36b.png align="center")
     
 
 > Here, Traffic(packet) goes to `eth0` and then `veth1` acts as tunnel and traffic goes to `root namespace` and `bridge` resolve the destination address using the `ARP table` then `Veth1` send traffic(packet) to `pod B`. This all only happens if there is a single node
 
+</p>
+  <p align="center">
+  <img src="">
+</p>
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727037799205/fa47b17e-b08e-4357-bb56-fbef2aefbaac.png align="center")
 
 ### StatefulSet: Managing Stateful Applications in Kubernetes
@@ -261,7 +301,11 @@ It helps manage stateful applications where each pod needs a unique identity and
     EOF
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909024059/d8691034-3b8f-4fdd-81ee-2ce4c0f3e793.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909024059/d8691034-3b8f-4fdd-81ee-2ce4c0f3e793.png align="center")
     
 * **A** `persistent volume` **and** `persistent volume claim` **is also created**
     
@@ -269,17 +313,29 @@ It helps manage stateful applications where each pod needs a unique identity and
     kubectl get pv
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909331546/a1451085-b5ec-4629-8235-d3303b68232d.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909331546/a1451085-b5ec-4629-8235-d3303b68232d.png align="center")
     
     ```bash
     kubectl get pvc
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909335672/57582e0d-5be9-4c19-a719-7cdb17f650ca.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909335672/57582e0d-5be9-4c19-a719-7cdb17f650ca.png align="center")
     
 * **Check for pods that is created**
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909533722/5aa3f5db-9348-4eb3-8fc5-88f1b48bdaa0.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909533722/5aa3f5db-9348-4eb3-8fc5-88f1b48bdaa0.png align="center")
     
 * **Create a service (**`svc.yml`**)**
     
@@ -299,9 +355,17 @@ It helps manage stateful applications where each pod needs a unique identity and
         app: postgres
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909682007/e8931793-58ac-4451-a44e-1d351bab5bf6.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909682007/e8931793-58ac-4451-a44e-1d351bab5bf6.png align="center")
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909735841/b07da77b-02b0-4565-bbb6-c9152bb2f547.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726909735841/b07da77b-02b0-4565-bbb6-c9152bb2f547.png align="center")
     
 * **Increase the replicas and you will see the each pod have a ordered and fixed name**
     
@@ -313,7 +377,11 @@ It helps manage stateful applications where each pod needs a unique identity and
     kubectl get pod
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726910106467/347b2175-fc31-485a-be0d-9f7247065427.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726910106467/347b2175-fc31-485a-be0d-9f7247065427.png align="center")
     
 * **If you delete a pod a new pod with the same name again created**
     
@@ -321,7 +389,11 @@ It helps manage stateful applications where each pod needs a unique identity and
     kubectl delete pod postgres-3
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726910233816/886c15f4-3136-4b00-84f6-3a39e65c5fcb.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1726910233816/886c15f4-3136-4b00-84f6-3a39e65c5fcb.png align="center")
     
 * **Check if the service is working or not**
     
@@ -368,6 +440,10 @@ kubectl run nginx --image=nginx
 kubectl expose pod nginx --type=NodePort --port 80
 ```
 
+</p>
+  <p align="center">
+  <img src="">
+</p>
 ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727105140410/67d640fd-661b-4317-92a9-efbf90edf1ce.png align="center")
 
 **Access the Server** `http://192.168.1.4:32613`
@@ -382,7 +458,11 @@ kubectl expose pod nginx --type=NodePort --port 80
     sudo iptables -t nat -L -n -v | grep -e NodePort -e KUBE
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727106551462/6aff24b2-d087-4c72-bea0-7792b271cd4e.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727106551462/6aff24b2-d087-4c72-bea0-7792b271cd4e.png align="center")
     
 * **Check Specific NodePort Rules**
     
@@ -390,7 +470,11 @@ kubectl expose pod nginx --type=NodePort --port 80
     sudo iptables -t nat -L -n -v | grep 32613
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727106679408/43bfcd1c-f643-48d9-a327-ca797995c469.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727106679408/43bfcd1c-f643-48d9-a327-ca797995c469.png align="center")
     
     > This indicates that traffic coming to port `32613` (your NodePort) is being redirected properly to the appropriate service.
     
@@ -438,7 +522,11 @@ The load balancer automatically distributes incoming traffic to all the pods run
     kubectl expose pod nginx --type=LoadBalancer --port=80
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110315954/0c508165-b196-45cb-9bbb-63878ab5d84b.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110315954/0c508165-b196-45cb-9bbb-63878ab5d84b.png align="center")
     
 * **Creates a network tunnel, making your LoadBalancer service accessible**
     
@@ -446,13 +534,25 @@ The load balancer automatically distributes incoming traffic to all the pods run
     minikube tunnel
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110572203/cd3f2ba4-6407-4359-ab56-fae09ddd2438.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110572203/cd3f2ba4-6407-4359-ab56-fae09ddd2438.png align="center")
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110594870/e60f4c85-1994-427f-b561-8e461773bcc8.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110594870/e60f4c85-1994-427f-b561-8e461773bcc8.png align="center")
     
 * **Access the Service at** `External-ip`
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110670807/563b2536-c0f8-4aa7-b79b-3dab581c0531.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727110670807/563b2536-c0f8-4aa7-b79b-3dab581c0531.png align="center")
     
 
 #### Why Avoid LoadBalancer in Production?
@@ -496,9 +596,17 @@ The **ExternalName** service type is a special kind of service in Kubernetes tha
     
 * Create the database pod and service
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115368577/3a5fc1d0-0a0b-491e-9e2e-0a64fd83ca0b.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115368577/3a5fc1d0-0a0b-491e-9e2e-0a64fd83ca0b.png align="center")
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115377815/cfdda7e6-a74b-4410-aa5b-ae1f0ac27e63.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115377815/cfdda7e6-a74b-4410-aa5b-ae1f0ac27e63.png align="center")
     
     ```bash
     kubectl apply -f db.yaml
@@ -507,7 +615,11 @@ The **ExternalName** service type is a special kind of service in Kubernetes tha
     
 * Create ExternalName service
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115300028/65f8c022-4f09-4066-bb27-fe42011993bd.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115300028/65f8c022-4f09-4066-bb27-fe42011993bd.png align="center")
     
     ```bash
     kubectl apply -f externam-db_svc.yaml
@@ -521,7 +633,11 @@ The **ExternalName** service type is a special kind of service in Kubernetes tha
     
 * Create the pod
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115974019/eccd8060-429f-4b69-9f92-f894b4c205fb.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727115974019/eccd8060-429f-4b69-9f92-f894b4c205fb.png align="center")
     
     ```bash
     kubectl apply -f apppod.yaml
@@ -721,9 +837,17 @@ Now, we create a service using `ClusterIP` and a resource using `Ingress`. User 
     curl <cluster-IP>
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727124231790/d638df6e-1f6e-4d01-9356-25a8f724fb9e.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727124231790/d638df6e-1f6e-4d01-9356-25a8f724fb9e.png align="center")
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727124365615/d06b9753-85f6-401b-b263-1fbcfa5c948c.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727124365615/d06b9753-85f6-401b-b263-1fbcfa5c948c.png align="center")
     
 
 > Now we need to access this application from outside the cluster without using `NodePort` and `LoadBalancer` service
@@ -771,11 +895,23 @@ Now, we create a service using `ClusterIP` and a resource using `Ingress`. User 
     <node-internal-IP> kubernets.hindi.bootcamp
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125797335/802cb4be-a2a6-4caa-bb42-15cb1b0c93e2.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125797335/802cb4be-a2a6-4caa-bb42-15cb1b0c93e2.png align="center")
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125853427/5a725d7c-30cd-40cf-94a6-aac359eb74fa.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125853427/5a725d7c-30cd-40cf-94a6-aac359eb74fa.png align="center")
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125857934/df63eef1-53c5-40fd-8ecf-98bc74932dd9.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125857934/df63eef1-53c5-40fd-8ecf-98bc74932dd9.png align="center")
     
 * Now apply the create `ingress.yaml` file
     
@@ -783,23 +919,42 @@ Now, we create a service using `ClusterIP` and a resource using `Ingress`. User 
     kubectl apply -f ingress.yaml
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126034264/5a8bdf43-49c9-43d5-a028-114ee8737bfa.png align="center")
+    </p>
+  <p align="center">
+  <img src="">
+</p>
+![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126034264/5a8bdf43-49c9-43d5-a028-114ee8737bfa.png align="center")
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126080194/8b92f224-6457-40d9-a7f5-bd03f0d10ed7.png align="center")
+    </p>
+  <p align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126080194/8b92f224-6457-40d9-a7f5-bd03f0d10ed7.png">
+</p>
     
 * We need to connect user to the ingress controller
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126383167/a47e632d-cba7-4ba2-a5f4-7e8637e1d57b.png align="center")
+    </p>
+  <p align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126383167/a47e632d-cba7-4ba2-a5f4-7e8637e1d57b.png">
+</p>
     
     ```bash
     curl kubernetes.hindi.bootcamp:30418
     ```
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126520617/82ac228a-368b-422b-ae8b-cb4a40924f6c.png align="center")
+    </p>
+  <p align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126520617/82ac228a-368b-422b-ae8b-cb4a40924f6c.png">
+</p>
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126576495/3011b087-b01a-4637-a274-34e5472ebabf.png align="center")
+    </p>
+  <p align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126576495/3011b087-b01a-4637-a274-34e5472ebabf.png">
+</p>
     
-    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126869944/05776b87-6b71-4798-8d8e-0e1f8d56f639.png align="center")
+    </p>
+  <p align="center">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126869944/05776b87-6b71-4798-8d8e-0e1f8d56f639.png">
+</p>
     
 
 ### ExternalDNS: Connecting Kubernetes to DNS Providers
