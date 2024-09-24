@@ -919,20 +919,16 @@ Now, we create a service using `ClusterIP` and a resource using `Ingress`. User 
     kubectl apply -f ingress.yaml
     ```
     
-    </p>
   <p align="center">
-  <img src="">
+  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126034264/5a8bdf43-49c9-43d5-a028-114ee8737bfa.png">
 </p>
-![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126034264/5a8bdf43-49c9-43d5-a028-114ee8737bfa.png align="center")
     
-    </p>
   <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126080194/8b92f224-6457-40d9-a7f5-bd03f0d10ed7.png">
 </p>
     
 * We need to connect user to the ingress controller
     
-    </p>
   <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126383167/a47e632d-cba7-4ba2-a5f4-7e8637e1d57b.png">
 </p>
@@ -940,18 +936,16 @@ Now, we create a service using `ClusterIP` and a resource using `Ingress`. User 
     ```bash
     curl kubernetes.hindi.bootcamp:30418
     ```
-    
-    </p>
+   
   <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126520617/82ac228a-368b-422b-ae8b-cb4a40924f6c.png">
 </p>
     
-    </p>
   <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126576495/3011b087-b01a-4637-a274-34e5472ebabf.png">
 </p>
     
-    </p>
+    
   <p align="center">
   <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1727126869944/05776b87-6b71-4798-8d8e-0e1f8d56f639.png">
 </p>
