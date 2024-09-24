@@ -535,4 +535,292 @@ The **ExternalName** service type is a special kind of service in Kubernetes tha
 
 **It** is a way to control how users access your applications running in Kubernetes. Think of it as a gatekeeper that directs traffic to the right place. To use ingress we firstly need to deploy an `Ingress Controller` on the cluster and the Ingress are implemented through `Ingress Controller`. Ingress controllers are the open source project of many companies such as `NGINX`, `Traefik`, `Istio Ingress`, etc.
 
-Now, we create a service using `ClusterIP` and a resource using `Ingress`. User request firstly goes to `ingress controller` then ingres
+Now, we create a service using `ClusterIP` and a resource using `Ingress`. User request firstly goes to `ingress controller` then ingress controller send it to `ingress` then after it goes to the `clusterIP` service configured by us and at last it goes to the pod. Here we deploy `Ingress Controller` as the `LoadBalancer`.
+
+#### Why Use Ingress?
+
+1. **Single Address**: Instead of having different addresses for each app, you can use one address for everything.
+    
+2. **Routing by URL**: You can send users to different apps based on the URL they visit. For example, `/app1` goes to one app and `/app2` goes to another.
+    
+3. **Secure Connections**: Ingress can handle secure connections (HTTPS) easily, so your apps are safe to use.
+    
+4. **Balancing Traffic**: It spreads out incoming traffic evenly, so no single app gets overloaded.
+    
+
+> #### Example
+> 
+> Imagine you have two apps:
+> 
+> * A website
+>     
+> * An API
+>     
+> 
+> You can set up Ingress to route traffic like this:
+> 
+> * If someone goes to `/`, they get the website.
+>     
+> * If they go to `/api`, they get the API.
+>     
+> 
+> Here’s how you might set it up:
+> 
+> ```yaml
+> apiVersion: networking.k8s.io/v1
+> kind: Ingress
+> metadata:
+>   name: example-ingress
+> spec:
+>   rules:
+>   - host: "my-app.com"
+>     http:
+>       paths:
+>       - path: /
+>         pathType: Prefix
+>         backend:
+>           service:
+>             name: website-service
+>             port:
+>               number: 80
+>       - path: /api
+>         pathType: Prefix
+>         backend:
+>           service:
+>             name: api-service
+>             port:
+>               number: 80
+> ```
+
+* Create a deployment (`deploy.yaml`)
+    
+    ```yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+       name: nginx-deployment
+    spec:
+       replicas: 1
+       selector:
+       matchLabels:
+          app: nginx
+       template:
+          metadata:
+             labels:
+               app: nginx
+          spec:
+             containers:
+             - name: nginx
+               image: nginx:latest
+               ports:
+               - containerPort: 80
+               volumeMounts:
+               - name: config-volume
+                 mountPath: /etc/nginx/nginx.conf
+                 subPath: nginx.conf  # Ensure this matches the filename in the ConfigMap
+               volumes:   
+               - name: config-volume
+                 configMap:
+                 name: nginx-config
+    ```
+    
+    ```yaml
+    kubectl apply -f deploy.yaml
+    ```
+    
+* Create a `clusterIP` service (svc.yaml)
+    
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+       name: nginx-service
+    spec:
+       selector:
+          app: nginx
+        ports:
+        - protocol: TCP
+          port: 80
+          targetPort: 80
+    ```
+    
+    ```bash
+    kubectl apply -f svc.yaml
+    ```
+    
+* verify the service is created
+    
+    ```bash
+    kubectl get svc
+    ```
+    
+* Create a nginx.conf file
+    
+    ```nginx
+    user  nginx;
+    worker_processes  auto;
+    
+    error_log  /var/log/nginx/error.log notice;
+    pid        /var/run/nginx.pid;
+    
+    events {
+    worker_connections  1024;
+    }
+    
+    http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+    
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    '$status $body_bytes_sent "$http_referer" '
+    '"$http_user_agent" "$http_x_forwarded_for"';
+    
+    access_log  /var/log/nginx/access.log  main;
+    
+    sendfile        on;
+    #tcp_nopush     on;
+    
+    keepalive_timeout  65;
+    
+    #gzip  on;
+    
+    server {
+    listen       80;
+    server_name  localhost;
+    
+    location / {
+    root   /usr/share/nginx/html;
+    index  index.html index.htm;
+    }
+    
+    location /public {
+    return 200 'Access to public granted!';
+    }
+    
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+    root   /usr/share/nginx/html;
+    }
+    }
+    }
+    ```
+    
+
+* Create a ConfigMap
+    
+    ```bash
+    kubectl create configmap nginx-config --from-file=nginx.conf
+    ```
+    
+* Access the server
+    
+    ```nginx
+    curl <cluster-IP>
+    ```
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727124231790/d638df6e-1f6e-4d01-9356-25a8f724fb9e.png align="center")
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727124365615/d06b9753-85f6-401b-b263-1fbcfa5c948c.png align="center")
+    
+
+> Now we need to access this application from outside the cluster without using `NodePort` and `LoadBalancer` service
+
+* Install `Ingress controller` first
+    
+    ```basic
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.4/deploy/static/provider/cloud/deploy.yaml
+    ```
+    
+* Create a Ingress object (`ingress.yaml`)
+    
+    ```yaml
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: bootcamp
+    spec:
+      ingressClassName: nginx
+      rules:
+      - host: "kubernetes.hindi.bootcamp"
+        http:
+          paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
+          - path: /public 
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
+    ```
+    
+* ssh onto the node where the pod is deployed and the change the /etc/hosts file
+    
+    ```yaml
+    # add this in file
+    <node-internal-IP> <nodeName>
+    <node-internal-IP> kubernets.hindi.bootcamp
+    ```
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125797335/802cb4be-a2a6-4caa-bb42-15cb1b0c93e2.png align="center")
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125853427/5a725d7c-30cd-40cf-94a6-aac359eb74fa.png align="center")
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727125857934/df63eef1-53c5-40fd-8ecf-98bc74932dd9.png align="center")
+    
+* Now apply the create `ingress.yaml` file
+    
+    ```bash
+    kubectl apply -f ingress.yaml
+    ```
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126034264/5a8bdf43-49c9-43d5-a028-114ee8737bfa.png align="center")
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126080194/8b92f224-6457-40d9-a7f5-bd03f0d10ed7.png align="center")
+    
+* We need to connect user to the ingress controller
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126383167/a47e632d-cba7-4ba2-a5f4-7e8637e1d57b.png align="center")
+    
+    ```bash
+    curl kubernetes.hindi.bootcamp:30418
+    ```
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126520617/82ac228a-368b-422b-ae8b-cb4a40924f6c.png align="center")
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126576495/3011b087-b01a-4637-a274-34e5472ebabf.png align="center")
+    
+    ![](https://cdn.hashnode.com/res/hashnode/image/upload/v1727126869944/05776b87-6b71-4798-8d8e-0e1f8d56f639.png align="center")
+    
+
+### ExternalDNS: Connecting Kubernetes to DNS Providers
+
+It connects your Kubernetes cluster to a DNS provider (like AWS Route53, Google Cloud DNS, or Cloudflare) and updates DNS records when you deploy new services or ingresses. This makes your apps available under a specific domain name.
+
+#### **How it works:**
+
+* **Watch Kubernetes Resources:** ExternalDNS continuously monitors Kubernetes resources (like `Service`, `Ingress`, or `Endpoint` resources) for changes.
+    
+* **Determine Desired DNS Records:** Based on the services or ingress objects, it calculates the required DNS records.
+    
+* **Update DNS Provider:** It then communicates with a DNS provider (like AWS Route53, Google Cloud DNS, or Cloudflare) to create, update, or delete DNS records as needed.
+    
+
+#### Use Cases
+
+* Automatically manage DNS entries for services or applications exposed via Kubernetes Ingress or LoadBalancer services.
+    
+* Keep DNS records up-to-date when service IPs or endpoints change.
+    
+* Use annotations to control which resources should have DNS records managed by ExternalDNS.
+    
+
+### Conclusion
+
+> In this article, we explored various aspects of Kubernetes, including services, networking fundamentals, StatefulSets, and different types of services like NodePort, LoadBalancer, ExternalName, Ingress, and ExternalDNS. We delved into the specifics of how each service type functions, their use cases, and provided practical examples to illustrate their implementation. Understanding these components is crucial for effectively managing and deploying applications in a Kubernetes environment. By mastering these concepts, you can ensure your applications are scalable, resilient, and efficiently managed within your Kubernetes clusters.
